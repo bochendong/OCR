@@ -36,7 +36,8 @@ class Env(object):
                     "selected_token_type_ids": selected_token_type_ids,  "selected_target": selected_target,
                     "remain_token_type_ids": remain_token_type_ids, "remain_input_ids": remain_input_ids, 
                     "remain_bbox": remain_bbox, "remain_target": remain_target,
-                    "attention_mask": attention_mask, "mask": mask, "image": image, "step" : 0
+                    "attention_mask": attention_mask, "mask": mask, "image": image, 
+                    "step" : 1
                 }
         
         return self.state
@@ -99,10 +100,10 @@ class Env(object):
             remain_bbox[action] = torch.tensor([0, 0, 0, 0])
             remain_target[action] = -100
 
-            selected_input_ids[step + 1] = 102  # <EOS> Token
-            selected_target[step + 1] = -100
-
             step += 1
+
+        selected_input_ids[step + 1] = 102  # <EOS> Token
+        selected_target[step + 1] = -100
 
         self.state = {
                     "selected_input_ids": selected_input_ids, "selected_bbox": selected_bbox,
