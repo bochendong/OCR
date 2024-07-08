@@ -66,8 +66,9 @@ class Env(object):
             reward = 0
         else:
             reward = -cur_loss
+        
 
-        return reward
+        return reward, cur_loss
         
     def update(self, actions):
         reward = 0
@@ -100,7 +101,7 @@ class Env(object):
             selected_input_ids[step + 1] = 102  # <EOS> Token
             selected_target[step + 1] = -100
 
-        reward = self.reward(state)
+        reward, cur_loss = self.reward(state)
 
         self.state = {
                     "selected_input_ids": selected_input_ids, "selected_bbox": selected_bbox,
@@ -111,4 +112,4 @@ class Env(object):
                 }
         
         
-        return self.state, reward
+        return self.state, reward, cur_loss
