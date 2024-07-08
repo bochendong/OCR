@@ -1,5 +1,5 @@
 import numpy as np
-from datasets import load_metric
+from datasets import load_metric # type: ignore # type: ignore # type: ignore
 
 
 def compute_metrics(outputs, target, id2label):
@@ -28,8 +28,6 @@ def compute_metrics(outputs, target, id2label):
         return {
             "precision": 0.0,
             "recall": 0.0,
-            "f1": 0.0,
-            "accuracy": 0.0,
         }
     else:
         results = metric.compute(predictions=true_predictions, references=true_labels, zero_division=0)

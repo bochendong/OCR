@@ -57,10 +57,12 @@ class Env(object):
             image=image.unsqueeze(0),
             labels=target
         )
+        
         return outputs
 
     def reward(self, state):
         outputs = self.get_result(state)
+
         cur_loss = outputs.loss.item()
         if (math.isnan(cur_loss)):
             reward = 0
