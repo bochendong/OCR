@@ -16,7 +16,7 @@ class Q_LearningAgent(object):
         self.device = device
         self.epsilon_schedule = [1.0, 0.9, 0.8, 0.7, 0.6]
 
-        self.Q_net = RLAgent(device)
+        self.Q_net = RLAgent(device).to(device)
         self.optimizer = optim.Adam(self.Q_net .parameters(), lr=learning_rate)
         self.criterion = criterion
 
