@@ -104,9 +104,6 @@ class Env(object):
 
             step += 1
 
-        env_reward, cur_loss = self.reward(state)
-        reward += env_reward
-
         self.state = {
                     "selected_input_ids": selected_input_ids, "selected_bbox": selected_bbox,
                     "selected_token_type_ids": selected_token_type_ids,  "selected_target": selected_target,
@@ -114,6 +111,9 @@ class Env(object):
                     "remain_bbox": remain_bbox, "remain_target": remain_target,
                     "attention_mask": attention_mask, "mask": mask, "image": image, "step" : step
                 }
+
+        env_reward, cur_loss = self.reward(self.state )
+        reward += env_reward
         
         
         return self.state, reward, cur_loss
