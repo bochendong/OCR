@@ -8,9 +8,11 @@ def train_rl_agent(agent, env, train_loader, action_length, path, policys=5):
         RL_loss_history = {}
         OCR_loss_history = {}
         total_step = 0
+        batch_num = 0
 
-        for batch_num, batch in enumerate(train_loader):
-            batch_loss = 0
+        for batch in enumerate(train_loader):
+            batch_num += 1
+            batch_loss_sum, ocr_loss_sum = 0, 0
             state = env.reset(batch)
             while (state["step"] < 512 - action_length):
                 reward = 0
@@ -22,20 +24,19 @@ def train_rl_agent(agent, env, train_loader, action_length, path, policys=5):
 
                 state = new_state
 
-                batch_loss += loss
+                batch_loss_sum += loss
+                ocr_loss_sum += ocr_loss
                 total_step += action_length
-
-                RL_loss_history[total_step] = loss/(batch_num + 1)
-                OCR_loss_history[total_step] = ocr_loss/(batch_num + 1)
             
-            logging.info(f'Batch Num: {batch_num}, Batch Loss: {batch_loss/(batch_num + 1)}, OCR_loss: {ocr_loss/(batch_num + 1)}')
+
+            RL_loss_history[total_step] = batch_loss_sum/(batch_num)
+            OCR_loss_history[total_step] = ocr_loss_sum/(batch_num)
+            logging.info(f'Batch Num: {batch_num}, Batch Loss: {batch_loss_sum/(batch_num)}, OCR_loss: {ocr_loss_sum/(batch_num)}')
         
         with open(path + f'/RL_loss_history_policy_{policy}.json', 'w') as f:
             json.dump(RL_loss_history, f)
 
         with open(path + f'/OCR_loss_history_policy_{policy}.json', 'w') as f:
             json.dump(OCR_loss_history, f)
-
-        
 
     return agent

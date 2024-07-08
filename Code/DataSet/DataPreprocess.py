@@ -25,7 +25,7 @@ class DataPreprocessor():
             'labels': Sequence(ClassLabel(names=self.labels)),
         })
     
-    def get_data_loader(self):
+    def GetDataLoader(self):
         def preprocess_data(examples):
             images = [Image.open(path).convert("RGB") for path in examples['image_path']]
             words = examples['words']
