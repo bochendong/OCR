@@ -10,7 +10,7 @@ def train_rl_agent(agent, env, train_loader, action_length, path, policys=5):
         total_step = 0
         batch_num = 0
 
-        for batch in enumerate(train_loader):
+        for batch in train_loader:
             batch_num += 1
             batch_loss_sum, ocr_loss_sum = 0, 0
             state = env.reset(batch)
