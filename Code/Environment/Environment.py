@@ -57,7 +57,7 @@ class Env(object):
             image=image.unsqueeze(0),
             labels=target
         )
-        
+
         return outputs
 
     def reward(self, state):
@@ -98,12 +98,14 @@ class Env(object):
             remain_token_type_ids[action] = 0
             remain_bbox[action] = torch.tensor([0, 0, 0, 0])
             remain_target[action] = -100
-            step += 1
 
             selected_input_ids[step + 1] = 102  # <EOS> Token
             selected_target[step + 1] = -100
 
-        reward, cur_loss = self.reward(state)
+            step += 1
+
+        env_reward, cur_loss = self.reward(state)
+        reward += env_reward
 
         self.state = {
                     "selected_input_ids": selected_input_ids, "selected_bbox": selected_bbox,
