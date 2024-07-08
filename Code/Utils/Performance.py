@@ -28,6 +28,8 @@ def compute_metrics(outputs, target, id2label):
         return {
             "precision": 0.0,
             "recall": 0.0,
+            "f1": 0.0,
+            "accuracy": 0.0,
         }
     else:
         results = metric.compute(predictions=true_predictions, references=true_labels, zero_division=0)

@@ -33,7 +33,7 @@ def train_rl_agent(agent, env, train_loader, action_length, path, policys=5):
 
             RL_loss_history[total_step] = batch_loss_sum/(batch_num)
             OCR_loss_history[total_step] = ocr_loss_sum/(batch_num)
-            logging.info(f'Batch Num: {batch_num}, Batch Loss: {batch_loss_sum/(batch_num)}, OCR_loss: {ocr_loss_sum/(batch_num)}')
+            logging.info(f'Batch Num: {batch_num}, step: {state["step"]}, Batch Loss: {batch_loss_sum/(batch_num)}, OCR_loss: {ocr_loss_sum/(batch_num)}')
         
         outputs = env.get_result(state)
         metrics = compute_metrics(outputs, state["selected_target"], id2label)
