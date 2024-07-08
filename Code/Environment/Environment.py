@@ -42,13 +42,21 @@ class Env(object):
         
         return self.state
 
-    def get_result(self, state):
-        input_ids = state["selected_input_ids"]
-        token_type_ids = state["selected_token_type_ids"]
-        bbox = state["selected_bbox"]
-        target = state["selected_target"]
-        image = state["image"]
-        mask = state["mask"]
+    def get_result(self, state, type = "RL"):
+        if (type == "RL"):
+            input_ids = state["selected_input_ids"]
+            token_type_ids = state["selected_token_type_ids"]
+            bbox = state["selected_bbox"]
+            target = state["selected_target"]
+            image = state["image"]
+            mask = state["mask"]
+        else:
+            input_ids = state["remain_input_ids"]
+            token_type_ids = state["remain_token_type_ids"]
+            bbox = state["remain_bbox"]
+            target = state["remain_target"]
+            image = state["image"]
+            mask = state["attention_mask"]
 
         outputs = self.OCR_Model(
             input_ids=input_ids.unsqueeze(0),

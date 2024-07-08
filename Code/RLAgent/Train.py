@@ -17,8 +17,8 @@ def train_rl_agent(agent, env, train_loader, action_length, path, policys=5):
             batch_num += 1
             batch_loss_sum, ocr_loss_sum = 0, 0
             state = env.reset(batch)
+
             while (state["step"] < 512 - action_length):
-                reward = 0
                 actions, q_values = agent.action(policy, state)
 
                 new_state, reward, ocr_loss = env.update(actions)

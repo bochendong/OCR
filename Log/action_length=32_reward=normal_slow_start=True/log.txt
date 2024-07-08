@@ -171,3 +171,13 @@ INFO - Batch Num: 24, Batch Loss: 1046.8283185958862
 INFO - Batch Num: 25, Batch Loss: 394.3570478707552
 INFO - Batch Num: 26, Batch Loss: 1199.8057221323252
 INFO - Batch Num: 27, Batch Loss: 472.82444429397583
+INFO - Policy: 0
+INFO - Batch 1, unseq Accuracy: (0.0,) F1: 0.0
+INFO - Policy: 0
+INFO - Batch 1, unseq Accuracy: (0.08108108108108109,) F1: 0.12903225806451615
+INFO - Policy: 0
+INFO - Batch 1, unseq Accuracy: (1.0,) F1: 1.0
+INFO - Batch Num: 1, step: 481, Batch Loss: 530.714033126831, OCR_loss: 1.399248905479908
+INFO - Batch Num: 2, step: 481, Batch Loss: 533.8038945198059, OCR_loss: 1.5870763137936592
+INFO - Batch Num: 3, step: 481, Batch Loss: 311.58691024780273, OCR_loss: 0.7961757630109787
+INFO - Batch Num: 4, step: 481, Batch Loss: 276.25990056991577, OCR_loss: 0.5892979092895985

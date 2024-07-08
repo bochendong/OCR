@@ -2,7 +2,7 @@ from transformers import AutoModelForTokenClassification, LayoutLMv2ForTokenClas
 
 
 def getBaseModel(id2label, label2id, model = "Fine_tune"):
-    if (model == "fine_tune"):
+    if (model == "Fine_tune"):
         model = AutoModelForTokenClassification.from_pretrained("nielsr/layoutlmv2-finetuned-funsd")
     else:
         model = LayoutLMv2ForTokenClassification.from_pretrained('microsoft/layoutlmv2-base-uncased',
