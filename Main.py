@@ -41,8 +41,8 @@ if __name__ == "__main__":
 
     for policy in range(5):
         PlotAgentLoss(Dir_PATH, policy)
-        f1_score = EvalRlAgent(agent, env, test_loader, action_length, 0)
-        
+        f1_score = EvalRlAgent(agent, env, test_loader, action_length, 0, funsd.id2label)
+
         print(f"Policy: {policy}, test_f1_score: {f1_score}")
 
     

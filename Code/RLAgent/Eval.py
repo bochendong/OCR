@@ -1,6 +1,6 @@
 from ..Utils.Performance import compute_metrics
 
-def EvalRlAgent(agent, env, test_loader, action_length, policy):
+def EvalRlAgent(agent, env, test_loader, action_length, policy, id2label):
     average_test_f1 = []
     for batch in test_loader:
         state = env.reset(batch)
@@ -9,7 +9,7 @@ def EvalRlAgent(agent, env, test_loader, action_length, policy):
             new_state, _, _ = env.update(actions)
             state = new_state
         outputs = env.get_result(state)
-        metrics = compute_metrics(outputs, state["selected_target"])
+        metrics = compute_metrics(outputs, state["selected_target"], id2label)
         f1 = metrics['f1']
         average_test_f1.append(f1)
 
