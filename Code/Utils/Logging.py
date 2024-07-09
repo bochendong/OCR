@@ -8,7 +8,7 @@ def SetupLogging(file_name):
                         force=True)
     
 
-def PlotAgentLoss(file_path, policy):
+def PlotAgentLoss(file_path, policy = 4):
     fig, axs = plt.subplots(2, 1, figsize=(10, 10))
 
     OCR_json_path = file_path + f'/OCR_loss_history_policy_{policy}.json'
