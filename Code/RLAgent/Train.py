@@ -28,8 +28,8 @@ def train_rl_agent(agent, env, train_loader, action_length, path, epoches=5):
                 ocr_loss_sum += ocr_loss
                 total_step += action_length
 
-            RL_loss_history[total_step] = batch_loss_sum
-            OCR_loss_history[total_step] = ocr_loss_sum
+            RL_loss_history[total_step] = batch_loss_sum/batch_num
+            OCR_loss_history[total_step] = ocr_loss_sum/batch_num
             logging.info(f'Batch Num: {batch_num}, Agent Loss: {batch_loss_sum/batch_num}, OCR_loss: {ocr_loss_sum/batch_num}')
 
         with open(path + f'/RL_loss_history_policy_{policy}.json', 'w') as f:
