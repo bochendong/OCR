@@ -1,11 +1,8 @@
 import json
 import logging
-from ..Utils.Performance import compute_metrics
 
-def train_rl_agent(agent, env, train_loader, action_length, path, policys=5):
-    labels = ['O', 'B-HEADER', 'I-HEADER', 'B-QUESTION', 'I-QUESTION', 'B-ANSWER', 'I-ANSWER']
-    id2label = {v: k for v, k in enumerate(labels)}
-    for policy in range(policys):
+def train_rl_agent(agent, env, train_loader, action_length, path, epoches=5):
+    for policy in range(epoches):
         logging.info(f'Policy: {policy}')
 
         RL_loss_history = {}
@@ -31,13 +28,9 @@ def train_rl_agent(agent, env, train_loader, action_length, path, policys=5):
                 ocr_loss_sum += ocr_loss
                 total_step += action_length
 
-            RL_loss_history[total_step] = batch_loss_sum/(batch_num)
-            OCR_loss_history[total_step] = ocr_loss_sum/(batch_num)
-            logging.info(f'Batch Num: {batch_num}, step: {state["step"]}, Batch Loss: {batch_loss_sum/(batch_num)}, OCR_loss: {ocr_loss_sum/(batch_num)}')
-        
-        outputs = env.get_result(state)
-        metrics = compute_metrics(outputs, state["selected_target"], id2label)
-        logging.info(f"Batch {batch_num}, Accuracy: {metrics['accuracy'],} F1: {metrics['f1']}")
+            RL_loss_history[total_step] = batch_loss_sum
+            OCR_loss_history[total_step] = ocr_loss_sum
+            logging.info(f'Batch Num: {batch_num}, Agent Loss: {batch_loss_sum/batch_num}, OCR_loss: {ocr_loss_sum/batch_num}')
 
         with open(path + f'/RL_loss_history_policy_{policy}.json', 'w') as f:
             json.dump(RL_loss_history, f)

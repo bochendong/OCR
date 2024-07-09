@@ -78,7 +78,6 @@ class Env(object):
         else:
             reward = -cur_loss
         
-
         return reward, cur_loss
         
     def update(self, actions):
@@ -95,7 +94,7 @@ class Env(object):
 
         for action in actions:
             if remain_input_ids[action] == 0:
-                reward -= -1
+                reward -= 1
             selected_input_ids[step] = remain_input_ids[action]
             selected_token_type_ids[step] = remain_token_type_ids[action]
             selected_bbox[step] = remain_bbox[action]
@@ -121,8 +120,6 @@ class Env(object):
                     "attention_mask": attention_mask, "mask": mask, "image": image, "step" : step
                 }
 
-        env_reward, cur_loss = self.reward(self.state)
-        reward += env_reward
-        
+        reward, cur_loss = self.reward(self.state)
         
         return self.state, reward, cur_loss
