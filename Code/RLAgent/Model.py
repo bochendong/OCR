@@ -52,7 +52,7 @@ class RLAgent(nn.Module):
 
         v = self.encoder_remained(remained).transpose(-2, -1)   # [512, 1]
 
-        attn_logits = torch.matmul(selected, remained.transpose(-2, -1))
+        attn_logits = torch.matmul(selected.transpose(-2, -1), remained)
         attention = F.softmax(attn_logits, dim=-1)          # [512, 512]
 
         print('attention', attention.size())
