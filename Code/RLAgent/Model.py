@@ -52,24 +52,13 @@ class RLAgent(nn.Module):
         remained = remained.unsqueeze(1)
         remained = remained + step_output
 
-        v = self.encoder_remained(remained)
-
-        print(selected.size())          # torch.Size([1, 512])
-        print(remained.size())          # torch.Size([1, 512])
-        print(step_output.size())       # torch.Size([1, 512])
-        print(v.size())                 # torch.Size([1, 512])
-
-        print(selected.size())                      # torch.Size([1, 512])
-        print(remained.size())                      # torch.Size([1, 512])
-        print(remained.transpose(-2, -1).size())    # torch.Size([512, 1])
+        v = self.encoder_remained(remained).transpose(-2, -1)
 
         attn_logits = torch.matmul(selected, remained.transpose(-2, -1))
         attention = F.softmax(attn_logits, dim=-1)
 
         score = torch.matmul(attention, v).squeeze()
 
-        x = torch.relu(self.fc1(score))
-        out = self.fc2(x)
-        print(out.size())
-        
-        return out
+        print('out', score.size())
+
+        return score.view(-1)
