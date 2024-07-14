@@ -1,8 +1,8 @@
 from transformers import AutoModelForTokenClassification, LayoutLMv2ForTokenClassification
 
 
-def getBaseModel(id2label, label2id, model = "Fine_tune"):
-    if (model == "Fine_tune"):
+def getBaseModel(id2label, label2id, model = "Fine_tuned"):
+    if (model == "Fine_tuned"):
         model = AutoModelForTokenClassification.from_pretrained("nielsr/layoutlmv2-finetuned-funsd")
     elif(model == "LayoutLMv3"):
         model = AutoModelForTokenClassification.from_pretrained("nielsr/layoutlmv3-finetuned-funsd")

@@ -2,7 +2,7 @@ import torch
 import math
 
 class Env(object):
-    def __init__(self, model, device, model_type = "fine-tune"):
+    def __init__(self, model, device, model_type = "Fine_tuned"):
         self.model_type = model_type
         self.OCR_Model = model
         self.device = device
