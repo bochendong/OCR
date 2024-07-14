@@ -13,6 +13,7 @@ class DataPreprocessor():
         self.label2id = {k: v for v, k in enumerate(self.labels)}
 
         if (model == "Fine_tuned"):
+            print("layoutlmv2 processor used")
             self.processor = AutoProcessor.from_pretrained("nielsr/layoutlmv2-finetuned-funsd", apply_ocr = False)
             self.features = Features({
                 'image': Array3D(dtype="int64", shape=(3, 224, 224)),
@@ -22,7 +23,7 @@ class DataPreprocessor():
                 'bbox': Array2D(dtype="int64", shape=(512, 4)),
                 'labels': Sequence(ClassLabel(names=self.labels)),
             })
-        elif(model =="LayoutLMv3"):
+        elif(model == "LayoutLMv3"):
             self.processor =AutoProcessor.from_pretrained("nielsr/layoutlmv3-finetuned-funsd", apply_ocr =False)
             self.features = Features({
                 'pixel_values': Array3D(dtype="float32", shape=(3, 224, 224)),  # 处理后的图像张量

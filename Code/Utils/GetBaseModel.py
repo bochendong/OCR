@@ -3,6 +3,7 @@ from transformers import AutoModelForTokenClassification, LayoutLMv2ForTokenClas
 
 def getBaseModel(id2label, label2id, model = "Fine_tuned"):
     if (model == "Fine_tuned"):
+        print("layoutlmv2 base model used")
         model = AutoModelForTokenClassification.from_pretrained("nielsr/layoutlmv2-finetuned-funsd")
     elif(model == "LayoutLMv3"):
         model = AutoModelForTokenClassification.from_pretrained("nielsr/layoutlmv3-finetuned-funsd")
