@@ -43,25 +43,25 @@ class RLAgent(nn.Module):
         step_output = self.step_processor(step_tensor)
 
         selected = self.encoder_s_input(selected_input_ids) + self.encoder_s_bbox(selected_bbox.view(-1)) 
+        selected = selected.unsqueeze(1)
+        selected = selected + step_output
 
         step_tensor = torch.tensor([step - 1], dtype=torch.float32, device=self.device).view(-1, 1)
         step_output = self.step_processor(step_tensor)
-        remained = self.encoder_r_input(remain_input_ids) + self.encoder_r_bbox(remain_bbox.view(-1)) + step_output
+        remained = self.encoder_r_input(remain_input_ids) + self.encoder_r_bbox(remain_bbox.view(-1))
+        remained = remained.unsqueeze(1)
+        remained = remained + step_output
 
         v = self.encoder_remained(remained)
 
-        print(selected.size())
-        print(remained.size())
-        print(step_output.size())
-        print(v.size())
+        print(selected.size())          # torch.Size([1, 512])
+        print(remained.size())          # torch.Size([1, 512])
+        print(step_output.size())       # torch.Size([1, 512])
+        print(v.size())                 # torch.Size([1, 512])
 
-
-        selected = selected.unsqueeze(1)
-        remained = remained.unsqueeze(1)
-
-        print(selected.size())
-        print(remained.size())
-        print(remained.transpose(-2, -1).size())
+        print(selected.size())                      # torch.Size([1, 512])
+        print(remained.size())                      # torch.Size([1, 512])
+        print(remained.transpose(-2, -1).size())    # torch.Size([512, 1])
 
         attn_logits = torch.matmul(selected, remained.transpose(-2, -1))
         attention = F.softmax(attn_logits, dim=-1)
