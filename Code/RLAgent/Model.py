@@ -69,4 +69,7 @@ class RLAgent(nn.Module):
         score = torch.matmul(attention, v).squeeze()
 
         x = torch.relu(self.fc1(score))
-        return self.fc2(x)
+        out = self.fc2(x)
+        print(out.size())
+        
+        return out
