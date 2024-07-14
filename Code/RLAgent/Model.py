@@ -44,12 +44,14 @@ class RLAgent(nn.Module):
 
         selected = self.encoder_s_input(selected_input_ids) + self.encoder_s_bbox(selected_bbox.view(-1)) 
         selected = selected.unsqueeze(1)
+        print("selected", selected.size())
         selected = selected + step_output
 
         step_tensor = torch.tensor([step - 1], dtype=torch.float32, device=self.device).view(-1, 1)
         step_output = self.step_processor(step_tensor)
         remained = self.encoder_r_input(remain_input_ids) + self.encoder_r_bbox(remain_bbox.view(-1))
         remained = remained.unsqueeze(1)
+        print("remained", selected.size())
         remained = remained + step_output
 
         v = self.encoder_remained(remained).transpose(-2, -1)   # [512, 1]
