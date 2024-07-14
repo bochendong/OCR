@@ -127,7 +127,7 @@ class Env(object):
 
         for action in actions:
             if remain_input_ids[action] == 0:
-                reward -= 1
+                reward -= 10
             selected_input_ids[step] = remain_input_ids[action]
             if (self.model_type != "LayoutLMv3"):
                 selected_token_type_ids[step] = remain_token_type_ids[action]
