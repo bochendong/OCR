@@ -122,21 +122,23 @@ class Env(object):
             remain_bbox, selected_bbox = state["remain_bbox"], state["selected_bbox"]
             selected_target, remain_target = state["selected_target"], state["remain_target"]
             remain_input_ids, selected_input_ids = state["remain_input_ids"], state["selected_input_ids"]
-            
+
         step = state["step"]
 
         for action in actions:
             if remain_input_ids[action] == 0:
                 reward -= 1
             selected_input_ids[step] = remain_input_ids[action]
-            selected_token_type_ids[step] = remain_token_type_ids[action]
+            if (self.model_type != "LayoutLMv3"):
+                selected_token_type_ids[step] = remain_token_type_ids[action]
             selected_bbox[step] = remain_bbox[action]
             selected_target[step] = remain_target[action]
 
             mask = selected_input_ids != 0
 
             remain_input_ids[action] = 0
-            remain_token_type_ids[action] = 0
+            if (self.model_type != "LayoutLMv3"):
+                remain_token_type_ids[action] = 0
             remain_bbox[action] = torch.tensor([0, 0, 0, 0])
             remain_target[action] = -100
 
