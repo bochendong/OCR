@@ -34,6 +34,8 @@ def main(learning_rate=1e-6, gamma=0.99, action_length = 32, epoches = 5, reward
     agent = Q_LearningAgent(action_length, device, criterion, 
                             learning_rate=learning_rate, gamma = gamma, slow_start = slow_start)
 
+    f1_score = EvalRlAgent(agent, env, test_loader, action_length, f1_cal)
+
     train_rl_agent(agent, env, train_loader, action_length, path = Dir_PATH, epoches = epoches)
 
     f1_score = EvalRlAgent(agent, env, test_loader, action_length, f1_cal)

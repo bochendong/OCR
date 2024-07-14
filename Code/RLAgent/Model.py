@@ -55,11 +55,6 @@ class RLAgent(nn.Module):
         attn_logits = torch.matmul(selected.transpose(-2, -1), remained)
         attention = F.softmax(attn_logits, dim=-1)          # [512, 512]
 
-        print('attention', attention.size())
-        print('v', v.size())
-
         score = torch.matmul(attention, v).squeeze()
-
-        print(v.size())
 
         return score.view(-1)
