@@ -27,11 +27,14 @@ class Q_LearningAgent(object):
         step = state["step"]
         q_values = self.predict(state, step)
         action_type = self.policy(epoch, step)
+        Q_net_actions = torch.topk(q_values, self.action_length, dim=-1).indices.squeeze().tolist()
+        if (epoch >= 1):
+            print(f'actions at step{step}:', Q_net_actions)
 
         if (action_type == "Greedy"):
             actions = list(range(step, step + self.action_length))
         else:
-            actions = torch.topk(q_values, self.action_length, dim=-1).indices.squeeze().tolist()
+            actions = Q_net_actions
 
         return actions, q_values
     
