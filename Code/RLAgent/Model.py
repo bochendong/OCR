@@ -59,6 +59,4 @@ class RLAgent(nn.Module):
 
         score = torch.matmul(attention, v).squeeze()
 
-        print('out', score.size())
-
         return score.view(-1)
