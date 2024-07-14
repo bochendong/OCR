@@ -52,11 +52,16 @@ class RLAgent(nn.Module):
         remained = remained.unsqueeze(1)
         remained = remained + step_output
 
-        v = self.encoder_remained(remained).transpose(-2, -1)
+        v = self.encoder_remained(remained).transpose(-2, -1)   # [512, 1]
 
         attn_logits = torch.matmul(selected, remained.transpose(-2, -1))
-        attention = F.softmax(attn_logits, dim=-1)
+        attention = F.softmax(attn_logits, dim=-1)          # [512, 512]
+
+        print('attention', attention.size())
+        print('v', v.size())
 
         score = torch.matmul(attention, v).squeeze()
+
+        print(v.size())
 
         return score.view(-1)
