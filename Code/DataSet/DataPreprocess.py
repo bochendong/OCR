@@ -6,6 +6,7 @@ from torch.utils.data import DataLoader
 
 class DataPreprocessor():
     def __init__(self, model = "Fine_tuned"):
+        self.model = model
         self.dataset = load_dataset("nielsr/funsd")
         self.labels = ['O', 'B-HEADER', 'I-HEADER', 'B-QUESTION', 'I-QUESTION', 'B-ANSWER', 'I-ANSWER']
         self.id2label = {v: k for v, k in enumerate(self.labels)}
@@ -13,20 +14,33 @@ class DataPreprocessor():
 
         if (model == "Fine_tuned"):
             self.processor = AutoProcessor.from_pretrained("nielsr/layoutlmv2-finetuned-funsd", apply_ocr = False)
+            self.features = Features({
+                'image': Array3D(dtype="int64", shape=(3, 224, 224)),
+                'input_ids': Sequence(feature=Value(dtype='int64')),
+                'attention_mask': Sequence(Value(dtype='int64')),
+                'token_type_ids': Sequence(Value(dtype='int64')),
+                'bbox': Array2D(dtype="int64", shape=(512, 4)),
+                'labels': Sequence(ClassLabel(names=self.labels)),
+            })
         elif(model =="LayoutLMv3"):
-            self.processor =AutoProcessor.from_pretrained("nielsr/layoutlmv3-finetuned-funsd",apply_ocr =False)
+            self.processor =AutoProcessor.from_pretrained("nielsr/layoutlmv3-finetuned-funsd", apply_ocr =False)
+            self.features = Features({
+                'pixel_values': Array3D(dtype="float32", shape=(3, 224, 224)),  # 处理后的图像张量
+                'input_ids': Sequence(Value(dtype='int64')),  # 单词的 token ID
+                'attention_mask': Sequence(Value(dtype='int64')),  # 注意力掩码
+                'bbox': Array2D(dtype="int64", shape=(512, 4)),  # 每个 token 的边界框
+                'labels': Sequence(ClassLabel(names=self.labels)),  # 标签
+            })
         else:
             self.processor = LayoutLMv2Processor.from_pretrained("microsoft/layoutlmv2-base-uncased", revision="no_ocr")
-        
-
-        self.features = Features({
-            'image': Array3D(dtype="int64", shape=(3, 224, 224)),
-            'input_ids': Sequence(feature=Value(dtype='int64')),
-            'attention_mask': Sequence(Value(dtype='int64')),
-            'token_type_ids': Sequence(Value(dtype='int64')),
-            'bbox': Array2D(dtype="int64", shape=(512, 4)),
-            'labels': Sequence(ClassLabel(names=self.labels)),
-        })
+            self.features = Features({
+                'image': Array3D(dtype="int64", shape=(3, 224, 224)),
+                'input_ids': Sequence(feature=Value(dtype='int64')),
+                'attention_mask': Sequence(Value(dtype='int64')),
+                'token_type_ids': Sequence(Value(dtype='int64')),
+                'bbox': Array2D(dtype="int64", shape=(512, 4)),
+                'labels': Sequence(ClassLabel(names=self.labels)),
+            })
     
     def GetDataLoader(self):
         def preprocess_data(examples):

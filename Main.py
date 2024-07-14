@@ -21,13 +21,13 @@ def main(learning_rate=1e-6, gamma=0.99, action_length = 32, epoches = 5, reward
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    funsd = DataPreprocessor()
+    funsd = DataPreprocessor("LayoutLMv3")
 
     train_loader, test_loader = funsd.GetDataLoader()
 
-    model = getBaseModel(funsd.id2label, funsd.label2id).to(device)
+    model = getBaseModel(funsd.id2label, funsd.label2id, "LayoutLMv3").to(device)
     f1_cal = Performance(funsd.id2label)
-    env = Env(model, device)
+    env = Env(model, device, "LayoutLMv3")
 
     criterion = nn.SmoothL1Loss()
     agent = Q_LearningAgent(action_length, device, criterion, 
