@@ -13,8 +13,11 @@ class DataPreprocessor():
 
         if (model == "Fine_tuned"):
             self.processor = AutoProcessor.from_pretrained("nielsr/layoutlmv2-finetuned-funsd", apply_ocr = False)
+        elif(model =="LayoutLMv3"):
+            self.processor =AutoProcessor.from_pretrained("nielsr/layoutlmv3-finetuned-funsd",apply_ocr =False)
         else:
             self.processor = LayoutLMv2Processor.from_pretrained("microsoft/layoutlmv2-base-uncased", revision="no_ocr")
+        
 
         self.features = Features({
             'image': Array3D(dtype="int64", shape=(3, 224, 224)),

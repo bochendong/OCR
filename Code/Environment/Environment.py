@@ -120,6 +120,8 @@ class Env(object):
                     "attention_mask": attention_mask, "mask": mask, "image": image, "step" : step
                 }
 
-        reward, cur_loss = self.reward(self.state)
+        env_reward, cur_loss = self.reward(self.state)
+
+        reward = reward + env_reward
         
         return self.state, reward, cur_loss

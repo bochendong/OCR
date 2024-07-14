@@ -12,6 +12,7 @@ class RLAgent(nn.Module):
         self.encoder_s_bbox = self._create_encoder(2048, output_size=512)
         self.encoder_r_input = self._create_encoder(512)
         self.encoder_r_bbox = self._create_encoder(2048, output_size=512)
+        
         self.encoder_remained = self._create_encoder(512)
 
         self.step_processor = nn.Sequential(
@@ -38,8 +39,13 @@ class RLAgent(nn.Module):
         remain_input_ids = state["remain_input_ids"].float().to(self.device)
         remain_bbox = state["remain_bbox"].float().to(self.device)
 
-        selected = self.encoder_s_input(selected_input_ids) + self.encoder_s_bbox(selected_bbox.view(-1))
-        remained = self.encoder_r_input(remain_input_ids) + self.encoder_r_bbox(remain_bbox.view(-1))
+        step_tensor = torch.tensor([step], dtype=torch.float32, device=score.device).view(-1, 1)
+        step_output = self.step_processor(step_tensor)
+        selected = self.encoder_s_input(selected_input_ids) + self.encoder_s_bbox(selected_bbox.view(-1)) 
+
+        step_tensor = torch.tensor([step - 1], dtype=torch.float32, device=score.device).view(-1, 1)
+        step_output = self.step_processor(step_tensor)
+        remained = self.encoder_r_input(remain_input_ids) + self.encoder_r_bbox(remain_bbox.view(-1)) + step_output
         v = self.encoder_remained(remained)
 
         selected = selected.unsqueeze(1)
@@ -50,10 +56,5 @@ class RLAgent(nn.Module):
 
         score = torch.matmul(attention, v).squeeze()
 
-        step_tensor = torch.tensor([step], dtype=torch.float32, device=score.device).view(-1, 1)
-        step_output = self.step_processor(step_tensor)
-
-        combined = score + step_output
-
-        x = torch.relu(self.fc1(combined))
+        x = torch.relu(self.fc1(score))
         return self.fc2(x)
