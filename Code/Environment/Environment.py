@@ -118,7 +118,7 @@ class Env(object):
             remain_input_ids, selected_input_ids = state["remain_input_ids"], state["selected_input_ids"]
             selected_token_type_ids, remain_token_type_ids = state["selected_token_type_ids"], state["remain_token_type_ids"]
         else:
-            image, attention_mask = state["pixel_values"], state["attention_mask"]
+            image, attention_mask = state["image"], state["attention_mask"]
             remain_bbox, selected_bbox = state["remain_bbox"], state["selected_bbox"]
             selected_target, remain_target = state["selected_target"], state["remain_target"]
             selected_token_type_ids, remain_token_type_ids = state["selected_token_type_ids"], state["remain_token_type_ids"]
