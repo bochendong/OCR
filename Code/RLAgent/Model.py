@@ -39,11 +39,11 @@ class RLAgent(nn.Module):
         remain_input_ids = state["remain_input_ids"].float().to(self.device)
         remain_bbox = state["remain_bbox"].float().to(self.device)
 
-        step_tensor = torch.tensor([step], dtype=torch.float32, device=score.device).view(-1, 1)
+        step_tensor = torch.tensor([step], dtype=torch.float32, device=self.device).view(-1, 1)
         step_output = self.step_processor(step_tensor)
         selected = self.encoder_s_input(selected_input_ids) + self.encoder_s_bbox(selected_bbox.view(-1)) 
 
-        step_tensor = torch.tensor([step - 1], dtype=torch.float32, device=score.device).view(-1, 1)
+        step_tensor = torch.tensor([step - 1], dtype=torch.float32, device=self.device).view(-1, 1)
         step_output = self.step_processor(step_tensor)
         remained = self.encoder_r_input(remain_input_ids) + self.encoder_r_bbox(remain_bbox.view(-1)) + step_output
         v = self.encoder_remained(remained)
