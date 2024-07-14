@@ -59,6 +59,10 @@ class RLAgent(nn.Module):
         selected = selected.unsqueeze(1)
         remained = remained.unsqueeze(1)
 
+        print(selected.size())
+        print(remained.size())
+        print(remained.transpose(-2, -1).size())
+
         attn_logits = torch.matmul(selected, remained.transpose(-2, -1))
         attention = F.softmax(attn_logits, dim=-1)
 
