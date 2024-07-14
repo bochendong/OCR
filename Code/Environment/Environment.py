@@ -15,6 +15,7 @@ class Env(object):
         bbox = batch['bbox'].to(device)
         target = batch['labels'].to(device)
         if (self.model_type != "LayoutLMv3"):
+            print(self.model_type)
             image = batch['image'].to(device)
             token_type_ids = batch['token_type_ids'].to(device)
             remain_token_type_ids = token_type_ids.clone()

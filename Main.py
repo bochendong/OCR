@@ -27,7 +27,8 @@ def main(learning_rate=1e-6, gamma=0.99, action_length = 32, epoches = 5, reward
 
     model = getBaseModel(funsd.id2label, funsd.label2id, "LayoutLMv3").to(device)
     f1_cal = Performance(funsd.id2label)
-    env = Env(model, device, "LayoutLMv3")
+    
+    env = Env(model, device, model_type = "LayoutLMv3")
 
     criterion = nn.SmoothL1Loss()
     agent = Q_LearningAgent(action_length, device, criterion, 
