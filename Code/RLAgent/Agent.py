@@ -26,6 +26,7 @@ class Q_LearningAgent(object):
     def action(self, epoch, state):
         step = state["step"]
         q_values = self.predict(state, step)
+        print(q_values.size())
         action_type = self.policy(epoch, step)
 
         if (action_type == "Greedy"):
