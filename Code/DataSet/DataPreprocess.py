@@ -34,7 +34,7 @@ class DataPreprocessor():
                 'labels': Sequence(ClassLabel(names=self.labels)),  # 标签
             })
         else:
-            print("layoutlmv3 base processor used")
+            print("layoutlmv2 base processor used")
             self.processor = LayoutLMv2Processor.from_pretrained("microsoft/layoutlmv2-base-uncased", revision="no_ocr")
             self.features = Features({
                 'image': Array3D(dtype="int64", shape=(3, 224, 224)),
