@@ -37,6 +37,8 @@ class Q_LearningAgent(object):
                 if (remain_id != 0):
                     actions[counter] = i
                     counter += 1
+                    if (counter >= self.action_length):
+                        break
         else:
             actions = Q_net_actions
 
