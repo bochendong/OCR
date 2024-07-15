@@ -30,7 +30,13 @@ class Q_LearningAgent(object):
         Q_net_actions = torch.topk(q_values, self.action_length, dim=-1).indices.squeeze().tolist()
 
         if (action_type == "Greedy"):
-            actions = list(range(step, step + self.action_length))
+            remain_input_ids = state["remain_input_ids"]
+            actions = [0] * self.action_length
+            counter = 0
+            for i, remain_id in enumerate(remain_input_ids):
+                if (remain_id != 0):
+                    actions[counter] = i
+                    counter += 1
         else:
             actions = Q_net_actions
 
