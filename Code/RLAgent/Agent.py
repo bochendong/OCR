@@ -28,8 +28,6 @@ class Q_LearningAgent(object):
         q_values = self.predict(state, step)
         action_type = self.policy(epoch, step)
         Q_net_actions = torch.topk(q_values, self.action_length, dim=-1).indices.squeeze().tolist()
-        if (epoch >= 1):
-            print(f'Max actions at step{step}:', Q_net_actions)
 
         if (action_type == "Greedy"):
             actions = list(range(step, step + self.action_length))
@@ -51,11 +49,10 @@ class Q_LearningAgent(object):
         step = state["step"]
         with torch.no_grad():
             next_q_values = self.predict(state, step)
-            max_next_q_value = torch.max(next_q_values).item()
-            target_q_value = reward + self.gamma * max_next_q_value
+            Q_net_actions = torch.topk(next_q_values, self.action_length, dim=-1).indices.squeeze().tolist()
 
         selected_q_values = q_values[actions].to(self.device)
-        target_q_values = torch.tensor([target_q_value] * self.action_length).to(self.device)
+        target_q_values = reward + next_q_values[Q_net_actions].to(self.device)
 
         loss = self.criterion(selected_q_values, target_q_values)
 
