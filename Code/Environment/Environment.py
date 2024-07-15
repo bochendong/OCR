@@ -124,6 +124,8 @@ class Env(object):
 
         step = state["step"]
 
+        prev_mask = selected_input_ids != 0
+
         for action in actions:
             selected_input_ids[step] = remain_input_ids[action]
             if (self.model_type != "LayoutLMv3"):
@@ -161,9 +163,9 @@ class Env(object):
                     }
 
         env_reward, cur_loss = self.reward(self.state)
-        token_pick_reward = sum(mask) - sum(attention_mask)
+        token_pick_reward = sum(mask) - sum(prev_mask)
 
-        print(f"token_not_picked: {abs(token_pick_reward)}")
+        print(f"token_not_picked: {abs(sum(mask) - sum(attention_mask) - 1)}")
 
         reward = token_pick_reward + env_reward
         
