@@ -20,7 +20,7 @@ class Q_LearningAgent(object):
         self.optimizer = optim.Adam(self.Q_net.parameters(), lr=learning_rate)
         self.criterion = criterion
         self.Q_net.train()
-        self.epslion = 1
+        self.epsilon = 1
 
     def predict(self, state, step):
         return self.Q_net(state, step // self.action_length).squeeze(0)
@@ -67,7 +67,7 @@ class Q_LearningAgent(object):
     
     def policy(self, epoch, step):
         if step < self.action_length:
-            self.epslion = max(self.epslion * 0.99, 0.6)
+            self.epsilon = max(self.epsilon * 0.99, 0.6)
 
         if (self.slow_start and (np.random.rand() < self.epsilon or step < 35)):
             action_type = "Greedy"
