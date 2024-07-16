@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.nn import TransformerEncoder, TransformerEncoderLayer
 
 class RLAgent(nn.Module):
     def __init__(self, device):
@@ -26,11 +27,15 @@ class RLAgent(nn.Module):
         self.fc1 = nn.Linear(512, 512)
         self.fc2 = nn.Linear(512, 512)
 
+        self.transformer_layer = TransformerEncoderLayer(d_model=512, nhead=8)
+        self.transformer_encoder = TransformerEncoder(self.transformer_layer, num_layers=6)
+
     def _create_encoder(self, input_size, output_size=512):
         return nn.Sequential(
             nn.Linear(input_size, 512),
             nn.ReLU(),
-            nn.Linear(512, output_size)
+            nn.Linear(512, output_size),
+            nn.LayerNorm(output_size)
         )
 
     def forward(self, state, step):
@@ -50,10 +55,13 @@ class RLAgent(nn.Module):
         remained = self.encoder_r_input(remain_input_ids) + self.encoder_r_bbox(remain_bbox.view(-1))
         remained = remained + step_output
 
-        v = self.encoder_remained(remained).transpose(-2, -1)   # [512, 1]
+        v = self.encoder_remained(remained).transpose(-2, -1) 
+
+        selected = self.transformer_encoder(selected.unsqueeze(0)).squeeze(0)
+        remained = self.transformer_encoder(remained.unsqueeze(0)).squeeze(0)
 
         attn_logits = torch.matmul(selected.transpose(-2, -1), remained)
-        attention = F.softmax(attn_logits, dim=-1)          # [512, 512]
+        attention = F.softmax(attn_logits, dim=-1)
 
         score = torch.matmul(attention, v).squeeze()
 
