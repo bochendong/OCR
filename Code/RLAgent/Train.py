@@ -2,21 +2,16 @@ import json
 import logging
 
 def train_rl_agent(agent, env, train_loader, action_length, path, epoches=5):
+    RL_running_sum = 0
+    batch_num = 0
     for policy in range(epoches):
         logging.info(f'Policy: {policy}')
-
-        RL_loss_history = {}
-        OCR_loss_history = {}
-        RL_running_sum = 0
-        OCR_running_sum = 0
-        RL_running_mean = {}
-        OCR_running_mean = {}
         total_step = 0
-        batch_num = 0
 
+        print(f'env with epslion = {env.epslion}')
         for batch in train_loader:
             batch_num += 1
-            batch_loss_sum, ocr_loss_sum = 0, 0
+            batch_loss_sum = 0
             state = env.reset(batch)
 
             while (state["step"] < 512 - action_length):
@@ -29,26 +24,13 @@ def train_rl_agent(agent, env, train_loader, action_length, path, epoches=5):
                 state = new_state
 
                 batch_loss_sum += loss
-                ocr_loss_sum += ocr_loss
                 total_step += action_length
 
-            RL_loss_history[total_step] = batch_loss_sum
-            OCR_loss_history[total_step] = ocr_loss_sum
-
             RL_running_sum += batch_loss_sum
-            OCR_running_sum += ocr_loss_sum
+            print("Org Seq: ", batch['input_ids'])
+            print("Enhanced Seq", state["selected_input_ids"])
 
-            RL_running_mean[total_step] = RL_running_sum / batch_num
-            OCR_running_mean[total_step] = OCR_running_sum / batch_num
-
-            logging.info(f'Batch Num: {batch_num}, Agent Loss: {batch_loss_sum}, OCR_loss: {ocr_loss_sum}')
-            logging.info(f'Running Mean RL Loss: {RL_running_mean[total_step]}, Running Mean OCR Loss: {OCR_running_mean[total_step]}')
-
-        with open(path + f'/RL_loss_history_policy_{policy}.json', 'w') as f:
-            json.dump(RL_loss_history, f)
-
-        with open(path + f'/OCR_loss_history_policy_{policy}.json', 'w') as f:
-            json.dump(OCR_loss_history, f)
+            logging.info(f'Running Mean RL Loss: {RL_running_sum / batch_num }')
 
 
     return agent

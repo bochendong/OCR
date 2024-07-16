@@ -1,6 +1,7 @@
 import math
 import logging
 import numpy as np
+import random
 
 import torch
 import torch.optim as optim
@@ -19,11 +20,32 @@ class Q_LearningAgent(object):
         self.optimizer = optim.Adam(self.Q_net.parameters(), lr=learning_rate)
         self.criterion = criterion
         self.Q_net.train()
+        self.epslion = 1
 
     def predict(self, state, step):
         return self.Q_net(state, step // self.action_length).squeeze(0)
     
     def action(self, epoch, state):
+        step = state["step"]
+        q_values = self.predict(state, step)
+        action_type = self.policy(epoch, step)
+
+        if (action_type == "Greedy"):
+            remain_input_ids = state["remain_input_ids"]
+            actions = [0] * self.action_length
+            counter = 0
+            for i, remain_id in enumerate(remain_input_ids):
+                if (remain_id != 0):
+                    actions[counter] = i
+                    counter += 1
+                    if (counter >= self.action_length):
+                        break
+        else:
+            Q_net_actions = torch.topk(q_values, self.action_length, dim=-1).indices.squeeze().tolist()
+            actions = Q_net_actions
+        
+        return actions, q_values
+        '''
         step = state["step"]
         q_values = self.predict(state, step)
         action_type = self.policy(epoch, step)
@@ -40,13 +62,14 @@ class Q_LearningAgent(object):
                     if (counter >= self.action_length):
                         break
         else:
-            actions = Q_net_actions
+            actions = Q_net_actions'''
 
-        return actions, q_values
     
     def policy(self, epoch, step):
-        epsilon = self.epsilon_schedule[epoch]
-        if (self.slow_start and (np.random.rand() < epsilon or step < 35)):
+        if step < self.action_length:
+            self.epslion = max(self.epslion * 0.99, 0.6)
+
+        if (self.slow_start and (np.random.rand() < self.epsilon or step < 35)):
             action_type = "Greedy"
         else:
             action_type = "Q_NET_PREDICT"

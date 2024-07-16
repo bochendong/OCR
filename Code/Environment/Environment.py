@@ -165,8 +165,6 @@ class Env(object):
         env_reward, cur_loss = self.reward(self.state)
         token_pick_reward = sum(mask) - sum(prev_mask) + 1
 
-        print(f"token picked this step: {sum(mask) - sum(prev_mask)}")
-
         reward = token_pick_reward * 10 + env_reward
         
         return self.state, reward, cur_loss
