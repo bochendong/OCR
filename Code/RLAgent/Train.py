@@ -8,7 +8,7 @@ def train_rl_agent(agent, env, train_loader, action_length, path, epoches=5):
         logging.info(f'Policy: {policy}')
         total_step = 0
 
-        print(f'env with epslion = {env.epslion}')
+        print(f'Agent with epslion = {agent.epslion}')
         for batch in train_loader:
             batch_num += 1
             batch_loss_sum = 0
