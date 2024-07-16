@@ -67,7 +67,7 @@ class Q_LearningAgent(object):
     
     def policy(self, epoch, step):
         if step < self.action_length:
-            self.epsilon = max(self.epsilon * 0.99, 0.6)
+            self.epsilon = max(self.epsilon * 0.999, 0.6)
 
         if (self.slow_start and (np.random.rand() < self.epsilon or step < 35)):
             action_type = "Greedy"
