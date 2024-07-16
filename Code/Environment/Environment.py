@@ -34,15 +34,13 @@ class Env(object):
         selected_bbox = torch.zeros_like(bbox).to(device)
         selected_target = torch.full((512,), -100).to(device)
 
-        selected_input_ids[0] = 101 # <CLS Token>
-        selected_target[0] = -100
         if (self.model_type == "LayoutLMv3"):
             self.state = {
                         "selected_input_ids": selected_input_ids, "selected_bbox": selected_bbox,
                         "selected_target": selected_target, "remain_input_ids": remain_input_ids, 
                         "remain_bbox": remain_bbox, "remain_target": remain_target,
                         "attention_mask": attention_mask, "mask": mask, "image": image, 
-                        "step" : 1
+                        "step" : 0
                     }
 
         else:
@@ -52,7 +50,7 @@ class Env(object):
                         "remain_token_type_ids": remain_token_type_ids, "remain_input_ids": remain_input_ids, 
                         "remain_bbox": remain_bbox, "remain_target": remain_target,
                         "attention_mask": attention_mask, "mask": mask, "image": image, 
-                        "step" : 1
+                        "step" : 0
                     }
         
         return self.state

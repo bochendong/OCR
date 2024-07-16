@@ -27,8 +27,8 @@ def train_rl_agent(agent, env, train_loader, action_length, path, epoches=5):
                 total_step += action_length
 
             RL_running_sum += batch_loss_sum
-            print("Org Seq: ", batch['input_ids'])
-            print("Enhanced Seq", state["selected_input_ids"])
+            # print("Org Seq: ", batch['input_ids'])
+            # print("Enhanced Seq", state["selected_input_ids"])
 
             logging.info(f'Running Mean RL Loss: {RL_running_sum / batch_num }')
 
