@@ -24,8 +24,6 @@ class RLAgent(nn.Module):
             nn.Linear(128, 512)
         )
 
-        self.fc1 = nn.Linear(512, 512)
-        self.fc2 = nn.Linear(512, 512)
 
         self.transformer_layer = TransformerEncoderLayer(d_model=512, nhead=8)
         self.transformer_encoder = TransformerEncoder(self.transformer_layer, num_layers=6)
